@@ -49,9 +49,11 @@ MAX_JOBS=4 pip install flash-attn --no-build-isolation
 
 If memory usage during compilation is less than 50%, increase MAX_JOBS to speed up the process. If the system runs out of memory, decrease MAX_JOBS.
 
-Download (pre-cache) base model and dataset:
+Download (pre-cache) a few base models and a dataset:
 
 ```
 hf download --max-workers 1 google/gemma-3-27b-it
+hf download --max-workers 1 google/gemma-3-12b-it
+hf download --max-workers 1 google/gemma-3-4b-it
 hf download --repo-type dataset --max-workers 1 bebechien/MobileGameNPC
 ```

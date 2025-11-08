@@ -1,0 +1,9 @@
+black
+ipykernel
+ipython
+ipywidgets
+jupyter_client
+jupyter_core
+jupyter-lsp
+nbformat
+notebook

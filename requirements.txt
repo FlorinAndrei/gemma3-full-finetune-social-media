@@ -9,6 +9,7 @@ jupyter_client
 jupyter_core
 jupyter-lsp
 matplotlib
+nbconvert
 nbformat
 ninja
 notebook

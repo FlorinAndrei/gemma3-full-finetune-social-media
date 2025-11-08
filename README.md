@@ -1,1 +1,57 @@
 Full fine-tuning of the Gemma3 LLM using a dataset with social media comments.
+
+The following process works well on an NVIDIA DGX Spark with 20 ARM cores, 128 GB unified RAM, running Ubuntu 24.04 LTS, with CUDA-13.0 installed on bare metal.
+
+# Install dependencies
+
+Run all commands in the folder containing this repository.
+
+Install Python packages and build tools:
+
+```
+apt-get update
+apt-get install python3-pip python3-venv python3-dev build-essential
+```
+
+Create and activate the Python environment, install most modules (Jupyter, Transformers, build tools):
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade -r requirements.txt
+```
+
+Install PyTorch with CUDA-13.0 modules - this will install several `nvidia-*` modules as well:
+
+```
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+```
+
+If the following command returns `True` then you have the right combination of PyTorch and CUDA versions, and the flash attention module will compile successfully:
+
+```
+python -c "import torch; print(torch.cuda._is_compiled())"
+```
+
+If the command returns `False`, either fix the version combo, or do not install flash attention (some operations with the model will run more slowly and will use more RAM). The wrong combination of PyTorch and CUDA versions will trigger this error while compiling flash attention:
+
+```
+CUDA_HOME environment variable is not set. Please set it to your CUDA install root.
+```
+
+Even if you set CUDA_HOME with the right value, the error will persist if there is a version mismatch.
+
+Compile and install the flash attention module (this will take a long time - the wheel file will have over 230 MB in size):
+
+```
+MAX_JOBS=4 pip install flash-attn --no-build-isolation
+```
+
+If memory usage during compilation is less than 50%, increase MAX_JOBS to speed up the process. If the system runs out of memory, decrease MAX_JOBS.
+
+Download (pre-cache) base model and dataset:
+
+```
+hf download --max-workers 1 google/gemma-3-27b-it
+hf download --repo-type dataset --max-workers 1 bebechien/MobileGameNPC
+```

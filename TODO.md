@@ -1,0 +1,1 @@
+Remove lines containing [removed]

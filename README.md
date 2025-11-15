@@ -13,12 +13,11 @@ apt-get update
 apt-get install python3-pip python3-venv python3-dev build-essential
 ```
 
-Create and activate the Python environment, install most modules (Jupyter, Transformers, build tools):
+Create and activate the Python environment:
 
 ```
 python3 -m venv .venv
 source .venv/bin/activate
-pip install --upgrade -r requirements.txt
 ```
 
 Install PyTorch with CUDA-13.0 modules - this will install several `nvidia-*` modules as well:
@@ -40,6 +39,12 @@ CUDA_HOME environment variable is not set. Please set it to your CUDA install ro
 ```
 
 Even if you set CUDA_HOME with the right value, the error will persist if there is a version mismatch.
+
+Install most modules:
+
+```
+pip install -r requirements.txt
+```
 
 Compile and install the flash attention module (this will take a long time - the wheel file will have over 230 MB in size):
 

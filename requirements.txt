@@ -19,9 +19,6 @@ protobuf
 sentencepiece
 setuptools
 tensorboard
-torch
-torchao
-torchvision
 transformers
 trl
 wheel

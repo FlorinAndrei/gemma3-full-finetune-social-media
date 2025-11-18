@@ -15,6 +15,7 @@ nbformat
 ninja
 notebook
 packaging
+peft
 protobuf
 sentencepiece
 setuptools

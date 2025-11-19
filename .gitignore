@@ -2,3 +2,4 @@
 checkpoints
 *.log
 *.csv
+merged_model

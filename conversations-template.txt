@@ -1,0 +1,3 @@
+"parent_text","comment_body"
+"Hi, how are you?","Fine, thanks."
+"Is water wet?","Of course!"

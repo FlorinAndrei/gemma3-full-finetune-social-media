@@ -3,3 +3,6 @@ Measured with nvidia-smi for the python process
 LoRA
 start training: 26341MiB
 4 hours later: 36619MiB
+
+full:
+start training: 96057MiB

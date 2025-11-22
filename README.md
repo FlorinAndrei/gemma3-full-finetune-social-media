@@ -69,3 +69,15 @@ The dataset I used is all comments I made on a large social media site since the
 This dataset is not public. But any prompt/answer dataset should work, if it's big enough. Put it in a file called `conversations.csv` with two columns: `parent_text` (the prompts) and `comment_body` (the answers). It's okay if each comment spans multiple rows, as long as the proper file format is used.
 
 See the file `conversations-template.txt` for an illustration of the desired format.
+
+# Training
+
+You do not have to always run training in Jupyter. The script `run-training.sh` can be used to run training as a detached process on a headless machine. The script collects stdout and stderr from training in two log files. You can simply ssh into the system and run:
+
+```
+bash run-training.sh train.ipynb
+```
+
+Then log out and let the training process continue to completion.
+
+`run-tensorboard.sh` can be used to start tensorboard as a background process, listening on all interfaces.

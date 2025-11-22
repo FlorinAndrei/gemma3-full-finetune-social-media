@@ -1,5 +1,6 @@
 .venv
-checkpoints
+checkpoints*
 *.log
 *.csv
-merged_model
+merged_model*
+runs

@@ -54,11 +54,18 @@ MAX_JOBS=4 pip install flash-attn --no-build-isolation
 
 If memory usage during compilation is less than 50%, increase MAX_JOBS to speed up the process. If the system runs out of memory, decrease MAX_JOBS.
 
-Download (pre-cache) a few base models and a dataset:
+Download (pre-cache) a few base models:
 
 ```
 hf download --max-workers 1 google/gemma-3-27b-it
 hf download --max-workers 1 google/gemma-3-12b-it
 hf download --max-workers 1 google/gemma-3-4b-it
-hf download --repo-type dataset --max-workers 1 bebechien/MobileGameNPC
 ```
+
+# Dataset
+
+The dataset I used is all comments I made on a large social media site since the day I started using it many years ago. It has about 30k observations. Each observation is a prompt/answer pair: the prompt is the comment I was responding to, and the answer is my own comment.
+
+This dataset is not public. But any prompt/answer dataset should work, if it's big enough. Put it in a file called `conversations.csv` with two columns: `parent_text` (the prompts) and `comment_body` (the answers). It's okay if each comment spans multiple rows, as long as the proper file format is used.
+
+See the file `conversations-template.txt` for an illustration of the desired format.

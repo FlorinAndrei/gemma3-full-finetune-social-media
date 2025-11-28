@@ -4,7 +4,7 @@ if [ $# -ne 1 ]; then
 fi
 
 nb_file=$1
-log_file_base="log-$(basename $nb_file)-$(date +%Y-%m-%d-%H-%M-%S)"
+log_file_base="log-$(basename $nb_file)-$(date +%Y%m%d-%H%M%S)"
 stdout_log_file="${log_file_base}-stdout.log"
 stderr_log_file="${log_file_base}-stderr.log"
 

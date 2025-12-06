@@ -1,9 +1,14 @@
+# https://huggingface.co/leon-se/gemma-3-27b-it-qat-W4A16-G128/blob/main/recipe.yaml
+# https://github.com/vllm-project/llm-compressor/blob/0.8.1/examples/quantization_w4a16/README.md
+
+# https://github.com/vllm-project/llm-compressor/issues/2102
+
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
 import os
 import torch
 
 # from llmcompressor.modifiers.quantization import GPTQModifier
-from llmcompressor.modifiers.awq import AWQModifier
+from llmcompressor.modifiers.awq import AWQModifier, AWQMapping
 from llmcompressor.entrypoints import oneshot
 
 MODEL_ID = "google/gemma-3-12b-it"
@@ -17,10 +22,13 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 processor = AutoProcessor.from_pretrained(MODEL_ID)
 
+recipe = [
+    AWQModifier(ignore=["lm_head"], scheme="W4A16_ASYM", targets=["Linear"]),
+]
+
+"""
 recipe = AWQModifier(
     ignore=["lm_head"],
-    # Offload cached activations to CPU to reduce GPU memory usage
-    offload_device=torch.device("cpu"),
     config_groups={
         "group_0": {
             "targets": ["Linear"],
@@ -35,11 +43,14 @@ recipe = AWQModifier(
         }
     },
 )
+"""
 
 # Calibration dataset - use a representative sample
 CALIBRATION_DATASET = "ultrachat-200k"
-# bigger is better, but will require more RAM
-NUM_CALIBRATION_SAMPLES = 128
+# quick test
+NUM_CALIBRATION_SAMPLES = 16
+# full calibration
+# NUM_CALIBRATION_SAMPLES = 128
 MAX_SEQ_LENGTH = 2048
 
 # Run quantization

@@ -4,3 +4,4 @@ checkpoints*
 *.csv
 merged_model*
 runs
+model_*

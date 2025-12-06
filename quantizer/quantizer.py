@@ -7,9 +7,8 @@ from llmcompressor.modifiers.awq import AWQModifier
 from llmcompressor.entrypoints import oneshot
 
 MODEL_ID = "google/gemma-3-12b-it"
-OUTPUT_DIR = "gemma3-12b-it-4bit"
+OUTPUT_DIR = "model_gemma3-12b-it-4bit"
 
-# Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_ID,
     device_map="auto",
@@ -18,17 +17,10 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 processor = AutoProcessor.from_pretrained(MODEL_ID)
 
-"""
-recipe = GPTQModifier(
-    targets="Linear",
-    scheme="W4A16",  # 4-bit weights, 16-bit activations
-    ignore=["lm_head"],  # Keep output layer in full precision
-)
-"""
-
 recipe = AWQModifier(
     ignore=["lm_head"],
-    offload_device=torch.device("cpu"),  # Offload cached activations to CPU to reduce GPU memory usage
+    # Offload cached activations to CPU to reduce GPU memory usage
+    offload_device=torch.device("cpu"),
     config_groups={
         "group_0": {
             "targets": ["Linear"],
@@ -37,14 +29,16 @@ recipe = AWQModifier(
                 "type": "int",
                 "symmetric": False,
                 "strategy": "group",
-                "group_size": 16,  # Changed from 128 to 16 to be divisible by 4304
-            }
+                # Changed from 128 to 16 to be divisible by 4304
+                "group_size": 16,
+            },
         }
-    }
+    },
 )
 
 # Calibration dataset - use a representative sample
 CALIBRATION_DATASET = "ultrachat-200k"
+# bigger is better, but will require more RAM
 NUM_CALIBRATION_SAMPLES = 128
 MAX_SEQ_LENGTH = 2048
 
@@ -53,7 +47,7 @@ oneshot(
     model=model,
     tokenizer=tokenizer,
     dataset=CALIBRATION_DATASET,
-    splits="train",  # Use the train split for calibration
+    splits="train",
     recipe=recipe,
     num_calibration_samples=NUM_CALIBRATION_SAMPLES,
     max_seq_length=MAX_SEQ_LENGTH,
